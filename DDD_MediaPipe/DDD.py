@@ -153,6 +153,7 @@ class VideoFrameHandler:
 
         DROWSY_TIME_txt_pos = (10, int(frame_h // 2 * 1.7))
         ALM_txt_pos = (10, int(frame_h // 2 * 1.85))
+        FPS_txt_pos = (10, 60)
 
         results = self.facemesh_model.process(frame)
 
@@ -199,7 +200,7 @@ class VideoFrameHandler:
 
         #Show FPS
         FPS_txt = f"FPS: {fps:.2f}"
-        plot_text(frame, FPS_txt, (1770,30), self.GREEN)
+        plot_text(frame, FPS_txt, FPS_txt_pos, self.GREEN)
 
         return frame, is_drowsy
 
