@@ -98,7 +98,7 @@ def play_alarm_sound():
     with play_lock:
         if not is_drowsy:
             return
-        playsound.playsound('/Users/daoxuanbac/Desktop/Python/SU23_DAP/Driver-Drowsiness-detection-using-Mediapipe-in-Python/audio/ambulance.wav')
+        playsound.playsound('/Users/daoxuanbac/Desktop/Python/SU23_DAP/DAP_Drowsiness/DDD_MediaPipe/audio/wake_up.wav')
 
 class VideoFrameHandler:
     def __init__(self):
@@ -115,6 +115,10 @@ class VideoFrameHandler:
 
         # Initializing Mediapipe FaceMesh solution pipeline
         self.facemesh_model = get_mediapipe_app()
+
+        #For showing FPS
+        self.frame_count = 0
+        self.start_time = time.time()
 
         # For tracking counters and sharing states in and out of callbacks.
         self.state_tracker = {
@@ -170,7 +174,6 @@ class VideoFrameHandler:
                 if self.state_tracker["DROWSY_TIME"] >= thresholds["WAIT_TIME"]:
                     is_drowsy = True
                     plot_text(frame, "WAKE UP! WAKE UP", ALM_txt_pos, self.state_tracker["COLOR"])
-                    # playsound.playsound('/Users/daoxuanbac/Desktop/Python/SU23_DAP/Driver-Drowsiness-detection-using-Mediapipe-in-Python/audio/wake_up.wav')
 
                     # Create a new thread to play the alarm sound
                     alarm_thread = threading.Thread(target=play_alarm_sound)
@@ -186,6 +189,17 @@ class VideoFrameHandler:
             DROWSY_TIME_txt = f"DROWSY: {round(self.state_tracker['DROWSY_TIME'], 3)} Secs"
             plot_text(frame, EAR_txt, self.EAR_txt_pos, self.state_tracker["COLOR"])
             plot_text(frame, DROWSY_TIME_txt, DROWSY_TIME_txt_pos, self.state_tracker["COLOR"])
+
+        self.frame_count += 1
+        current_time = time.time()
+
+        # Calculate FPS
+        elapsed_time = current_time - self.start_time
+        fps = self.frame_count / elapsed_time
+
+        #Show FPS
+        FPS_txt = f"FPS: {fps:.2f}"
+        plot_text(frame, FPS_txt, (1770,30), self.GREEN)
 
         return frame, is_drowsy
 
