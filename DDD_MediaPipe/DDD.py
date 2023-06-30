@@ -94,7 +94,7 @@ play_lock = threading.Lock()
 is_drowsy = False
 
 def play_alarm_sound():
-    # Kiểm tra lock trước khi phát âm thanh
+    # Check the lock before playing the sound
     with play_lock:
         if not is_drowsy:
             return
